@@ -6,13 +6,14 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostCat;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PostCatController extends Controller
 {
     public function assign(Request $request){
         $request->validate([
-            'post' =>'exists:posts,id',
-            'categories.*' => 'exists:categories,id'
+            'post' =>Rule::exists('posts','id')->whereNull('deleted_at'),
+            'categories.*' => Rule::exists('categories','id')->whereNull('deleted_at')
         ]);
         foreach ($request->categories as $category) {
             $temp = PostCat::where('post_id',$request['post'])->where('category_id',$category)->get();
@@ -46,8 +47,8 @@ class PostCatController extends Controller
 
     public function unassign(Request $request){
         $request->validate([
-            'post' =>'exists:posts,id',
-            'categories.*' => 'exists:categories,id'
+            'post' =>Rule::exists('posts','id')->whereNull('deleted_at'),
+            'categories.*' => Rule::exists('categories','id')->whereNull('deleted_at')
         ]);
         foreach ($request->categories as $category) {
             $temp = PostCat::where('post_id',$request['post'])->where('category_id',$category)->get();

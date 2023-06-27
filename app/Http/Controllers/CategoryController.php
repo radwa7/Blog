@@ -38,7 +38,8 @@ class CategoryController extends Controller
 
     public function create(Request $request){
         $cat = $request->validate([
-            'name' => Rule::unique('categories')->whereNull('deleted_at'),
+            'name' =>'required|string',
+            'name' => Rule::unique('categories','name')->whereNull('deleted_at'),
 
         ]);
 
@@ -61,7 +62,7 @@ class CategoryController extends Controller
             ],404);
         } 
         $newCat = $request->validate([
-            'name' => 'required|string|unique:categories,name'
+            'name' => 'required|string|unique:categories,name,'.$cat->id
         ]);
         $cat->update($newCat);
         return response()->json([

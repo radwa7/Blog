@@ -37,7 +37,8 @@ class PostController extends Controller
 
     public function create(Request $request){
         $post = $request->validate([
-            'title' => 'required|string|',Rule::unique('posts')->whereNull('deleted_at'),
+            'title' => 'required|string',
+            'title'=> Rule::unique('posts','title')->whereNull('deleted_at'),
             'content' => 'required',
             
         ]);
